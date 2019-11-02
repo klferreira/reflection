@@ -75,7 +75,44 @@ func TestStringMaxLenValidationError(t *testing.T) {
 		t.Error("Validation was expected to have errors, but none were found")
 	} else {
 		got := errs[0].Error()
-		want := v.StringMaxLenExceededErr("name", 3).Error()
+		want := v.StringMaxLengthErr("name", 3).Error()
+
+		if got != want {
+			t.Error("The error message does not match the expected")
+		}
+	}
+}
+
+func TestStringMinLenValidationSuccess(t *testing.T) {
+	ruleset := &v.Schema{
+		"name": v.NewRules().String().MinLen(4),
+	}
+
+	user := map[string]interface{}{
+		"name": "John",
+	}
+
+	ok, errs := v.Validate(user, ruleset)
+	if !ok || len(errs) > 0 {
+		t.Error("Validation was expected to be successful, but errors were found")
+	}
+}
+
+func TestStringMinLenValidationError(t *testing.T) {
+	ruleset := &v.Schema{
+		"name": v.NewRules().String().MinLen(5),
+	}
+
+	user := map[string]interface{}{
+		"name": "John",
+	}
+
+	ok, errs := v.Validate(user, ruleset)
+	if ok || errs == nil || len(errs) == 0 {
+		t.Error("Validation was expected to have errors, but none were found")
+	} else {
+		got := errs[0].Error()
+		want := v.StringMinLengthErr("name", 5).Error()
 
 		if got != want {
 			t.Error("The error message does not match the expected")
