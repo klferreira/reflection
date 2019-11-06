@@ -13,3 +13,7 @@ func StringMaxLengthErr(key string, max int) error {
 func StringMinLengthErr(key string, min int) error {
 	return fmt.Errorf("\"%s\" length is less than specified minimum of %d", key, min)
 }
+
+func IntTypeErr(key string, vtype string) error {
+	return fmt.Errorf("\"%s\" is of type %s, should be int", key, vtype)
+}
