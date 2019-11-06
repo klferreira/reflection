@@ -50,11 +50,13 @@ func (r *StringRuleSet) checkMinLen(key string, value string) error {
 
 func (r *StringRuleSet) Validate(key string, value interface{}) (errs []error) {
 	rValue := reflect.ValueOf(value)
-	sValue := rValue.String()
 
 	if err := r.checkType(key, rValue); err != nil {
 		errs = append(errs, err)
+		return
 	}
+
+	sValue := rValue.String()
 
 	if err := r.checkMaxLen(key, sValue); err != nil {
 		errs = append(errs, err)
